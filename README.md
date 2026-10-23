@@ -1,7 +1,5 @@
 IntellMeet - AI-Powered Enterprise Meeting & Collaboration Platform
 
-AI-Powered Enterprise Meeting & Collaboration Platform built with the MERN stack.
-
 ## Backend Dependencies
 
 - **express**: Web framework for Node.js.

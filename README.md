@@ -1,10 +1,10 @@
-<<<<<<< HEAD
+
 # IntellMeet
 
 AI-Powered Enterprise Meeting & Collaboration Platform built with the MERN stack.
 =======
 IntellMeet - AI-Powered Enterprise Meeting & Collaboration Platform
->>>>>>> 9909e3c7f34d78da3f4ce05d7492675129b73447
+
 
 ## Backend Dependencies
 

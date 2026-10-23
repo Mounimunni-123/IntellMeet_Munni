@@ -1,0 +1,33 @@
+# Python Virtual Environments
+**/venv/
+**/.venv/
+venv/
+.venv/
+backend/python/venv/
+
+# Dependency directories
+node_modules/
+**/node_modules/
+
+# Environment files
+.env
+.env*.local
+**/.env
+**/.env*.local
+
+# Build directories
+dist/
+**/dist/
+dist-ssr/
+**/dist-ssr/
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db

@@ -1,4 +1,4 @@
-# IntellMeet
+IntellMeet - AI-Powered Enterprise Meeting & Collaboration Platform
 
 AI-Powered Enterprise Meeting & Collaboration Platform built with the MERN stack.
 

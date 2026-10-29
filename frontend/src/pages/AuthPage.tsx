@@ -15,8 +15,8 @@ import AppLogoImg from "../assets/AppLogo.png";
 type AuthMode = "signin" | "signup";
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
-
+  import.meta.env.VITE_API_URL || "https://intellmeet-munni.onrender.com";
+  
 export const AuthPage = () => {
   const setAuth = useAuthStore((state) => state.setAuth);
   const [searchParams, setSearchParams] = useSearchParams();

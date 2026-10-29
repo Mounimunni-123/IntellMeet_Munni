@@ -1,8 +1,9 @@
 import { apiFetch } from "@/lib/apiFetch";
 import { useAuthStore } from "@/stores/authStore";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
-
+const API_BASE =
+  import.meta.env.VITE_API_URL || "https://intellmeet-munni.onrender.com";
+  
 export const updateUsername = async (username: string): Promise<void> => {
   const res = await apiFetch("/api/auth/profile", {
     method: "PATCH",

@@ -2,7 +2,8 @@ import { useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { useAuthStore } from "@/stores/authStore";
 
-const SOCKET_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const SOCKET_URL =
+  import.meta.env.VITE_API_URL || "https://intellmeet-munni.onrender.com";
 
 let socketInstance: Socket | null = null;
 

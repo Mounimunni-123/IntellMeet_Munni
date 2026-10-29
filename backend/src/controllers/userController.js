@@ -1,4 +1,5 @@
 
+
 import User from "../models/userModel.js";
 import {
   generateAccessToken,
@@ -15,7 +16,7 @@ export const googleCallback = (req, res) => {
 
   setRefreshTokenCookie(res, refreshToken);
 
-  res.redirect(
+  return res.redirect(
     `${process.env.FRONTEND_URL}/auth/signin?token=${accessToken}`,
   );
 };
@@ -24,10 +25,18 @@ export const signup = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        message: "Name, email and password are required",
+      });
+    }
+
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({
+        message: "User already exists",
+      });
     }
 
     const user = await User.create({ name, email, password });
@@ -53,27 +62,41 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    const user = await User.findOne({ email });
+    const { email, password } = req.body || {};
 
-    if (user && (await user.matchPassword(password))) {
-      const accessToken = generateAccessToken(user._id);
-      const refreshToken = generateRefreshToken(user._id);
-
-      setRefreshTokenCookie(res, refreshToken);
-
-      return res.status(200).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        accessToken,
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Email and password are required",
       });
     }
 
-    return res.status(401).json({
-      message: "Invalid email or password",
+    const user = await User.findOne({ email });
+
+    if (!user || !user.password) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    const isPasswordValid = await user.matchPassword(password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    setRefreshTokenCookie(res, refreshToken);
+
+    return res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      accessToken,
     });
   } catch (error) {
     console.error("LOGIN ERROR:", error);
@@ -85,7 +108,7 @@ export const login = async (req, res) => {
 };
 
 export const refreshToken = async (req, res) => {
-  const token = req.cookies.refreshToken;
+  const token = req.cookies?.refreshToken;
 
   if (!token) {
     return res.status(403).json({
@@ -94,7 +117,11 @@ export const refreshToken = async (req, res) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_REFRESH_SECRET,
+    );
+
     const accessToken = generateAccessToken(decoded.userId);
 
     return res.status(200).json({ accessToken });
@@ -109,6 +136,7 @@ export const refreshToken = async (req, res) => {
 
 export const logout = (req, res) => {
   res.clearCookie("refreshToken");
+
   return res.status(200).json({
     message: "Logged out successfully",
   });
@@ -124,7 +152,9 @@ export const updateUserProfile = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        message: "User not found",
+      });
     }
 
     user.name = username || user.name;
@@ -149,13 +179,17 @@ export const updateUserProfile = async (req, res) => {
 export const uploadAvatar = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
+      return res.status(400).json({
+        message: "No file uploaded",
+      });
     }
 
     const user = await User.findById(req.user._id);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        message: "User not found",
+      });
     }
 
     user.avatar = req.file.path;
@@ -176,7 +210,9 @@ export const uploadAvatar = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({}).select("name email avatar");
+    const users = await User.find({})
+      .select("name email avatar");
+
     return res.status(200).json(users);
   } catch (error) {
     console.error("GET USERS ERROR:", error);
